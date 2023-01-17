@@ -15,6 +15,8 @@ let shuffle = function (array) {
   return array;
 };
 
+// TODO: Make the function create a new array, append values, and then return the new array
+
 // This function is responsible for resetting the gameState
 function generateGameState() {
   // Populating the icons
@@ -50,6 +52,7 @@ function renderBoard() {
     // Adding or removing the match class
     if (gameState.board[i].matched) {
       elementCards[i].classList.add("matched");
+      console.log(gameState);
     } else {
       elementCards[i].classList.remove("matched");
     }
@@ -78,6 +81,8 @@ function revealCard(event) {
     clickedCardClass = event.target.classList[1];
   }
 
+  // TODO: Check a method to simplify above lines of code (nearest or closest name of the method)
+
   const gameStateCard = gameState.board.find(
     (element) => element.icon === clickedCardClass
   );
@@ -88,16 +93,17 @@ function revealCard(event) {
     renderBoard();
 
     // Change the "next card"/card to find
-    // newCardToFind();
+    newCardToFind();
   } else {
     // The card clicked is not a match
     // Show the card
     gameStateCard.show = true;
+
     renderBoard();
 
     // Hide the card again after a set duration
     gameStateCard.show = false;
-    setTimeout(() => renderBoard(), 375);
+    setTimeout(() => renderBoard(), 1200);
   }
 }
 
@@ -113,11 +119,13 @@ function newCardToFind() {
     }
   }
 
-  renderBoard();
+  // renderBoard();
 }
 
+// TODO:
 /**
  * 5. If it is a match, then change the cardToFind variable to a new one
+ * 6. Fix a bug: Whenever there is a match, why is the board resetting?? - Seems to be only happening after a match - Calling Lines 51 - 54 twice???
  */
 
 const gameState = {

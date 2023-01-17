@@ -33,9 +33,25 @@ function generateGameState() {
 function renderBoard() {
   const elementCards = [...document.getElementsByClassName("card")];
   for (let i = 0; i < elementCards.length; i++) {
-    const currentIcon = elementCards[i].firstElementChild.classList[1];
+    // Replacing the icon class name to match the icon class name in gameState
+    const currentCard = elementCards[i].firstElementChild;
+    const currentIcon = currentCard.classList[1];
     const newIcon = gameState.board[i].icon;
-    elementCards[i].firstElementChild.classList.replace(currentIcon, newIcon);
+    currentCard.classList.replace(currentIcon, newIcon);
+
+    // Adding or removing the match class
+    if (gameState.board[i].matched) {
+      elementCards[i].classList.add("matched");
+    } else {
+      elementCards[i].classList.remove("matched");
+    }
+
+    // Adding or removing the show class
+    if (gameState.board[i].show) {
+      elementCards[i].classList.add("show");
+    } else {
+      elementCards[i].classList.remove("show");
+    }
   }
 }
 

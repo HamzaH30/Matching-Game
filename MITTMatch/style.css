@@ -102,8 +102,7 @@ main {
 }
 
 #cards .card i {
-  /* TODO: CHANGE THIS BACK TO ORIGINAL */
-  /* display: none; */
+  display: none;
 }
 
 #cards .card.show i,

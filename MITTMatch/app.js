@@ -1,4 +1,4 @@
-// Modifying Shuffle function from http://stackoverflow.com/a/2450976
+// This is a modified Shuffle function. Originally from http://stackoverflow.com/a/2450976
 let shuffle = function (array) {
   // Creating a new array so that the array referenced passed in does not get affected
   let newShuffledArray = [];
@@ -32,6 +32,9 @@ function generateGameState() {
     gameState.board[i].matched = false;
     gameState.board[i].show = false;
   }
+
+  // Reset the score
+  gameState.score = 0;
 
   // Change the card to find to a new card
   newCardToFind();
@@ -69,10 +72,16 @@ function renderBoard() {
     document.getElementById("next-card").firstElementChild;
   const oldCardToFind = nextCardElement.classList[1];
   nextCardElement.classList.replace(oldCardToFind, gameState.cardToFind);
+
+  // Update the score
+  document.getElementById("score").innerText = gameState.score;
 }
 
 // This function is responsible for revealing a card and changing its properties when clicked
 function revealCard(event) {
+  // Add this click to the total score
+  gameState.score += 1;
+
   let clickedCardClass;
   /**
    * There are 2 areas a user can click
@@ -98,8 +107,8 @@ function revealCard(event) {
     // The card clicked is a match, set matched to true
     gameStateCard.matched = true;
 
+    // Generate a new card for the user to find
     newCardToFind();
-    console.log(gameState);
 
     renderBoard();
   } else {
@@ -116,10 +125,11 @@ function revealCard(event) {
     setTimeout(() => {
       renderBoard();
       document.getElementById("cards").addEventListener("click", revealCard);
-    }, 100); // TODO: Change this to 1000ms
+    }, 1000); // TODO: Change this to 1000ms
   }
 }
 
+// This function is responsible for generating a new card for the user to find.
 function newCardToFind() {
   // Generate through a random array of cards
   let deckOfCards = shuffle(gameState.board);
@@ -130,6 +140,11 @@ function newCardToFind() {
     }
   }
 }
+
+// TODO:
+/**
+ * Add a scoring system
+ */
 
 const gameState = {
   cardToFind: "fa-anchor",

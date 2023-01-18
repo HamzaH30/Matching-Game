@@ -1,3 +1,11 @@
+// TODO:
+/**
+ * 1. ERROR HANDLING: When the user clicks in between boxes, or sometimes certain mouse drags will cause the program to fire an error. I need to make sure this error doesn't get caused
+ * 2. Code Clean-Up
+ * 3. Ask Alex or Chris for their advice/opinion. Get them to test out the program and find any flaws!
+ * 4. Write "Copyright" info at top (name, course, date, etc.)
+ */
+
 // This is a modified Shuffle function. Originally from http://stackoverflow.com/a/2450976
 let shuffle = function (array) {
   // Creating a new array so that the array referenced passed in does not get affected
@@ -131,7 +139,12 @@ function revealCard(event) {
     setTimeout(() => {
       renderBoard();
       document.getElementById("cards").addEventListener("click", revealCard);
-    }, 200); // TODO: Change this to 1000ms
+    }, 1000); // TODO: Change this to 1000ms
+  }
+
+  // Check if the user has won the game by matching all cards
+  if (checkIfWin()) {
+    setTimeout(() => userHasWon(), 1);
   }
 }
 
@@ -147,10 +160,24 @@ function newCardToFind() {
   }
 }
 
-// TODO:
-/**
- * Add a scoring system
- */
+// This function returns true or false depending on if the user has matched all the cards
+function checkIfWin() {
+  for (let card of gameState.board) {
+    if (!card.matched) {
+      // There is still a card that has not been matched, therefore the user has not won yet.
+      return false;
+    }
+  }
+
+  // Did not return false, therefore all cards have been matched and user wins.
+  return true;
+}
+
+function userHasWon() {
+  alert(
+    `You have won the game! It took you ${gameState.score} moves! You may restart the game to play again!`
+  );
+}
 
 const gameState = {
   cardToFind: "fa-anchor",

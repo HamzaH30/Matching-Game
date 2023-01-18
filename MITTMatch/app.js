@@ -79,9 +79,6 @@ function renderBoard() {
 
 // This function is responsible for revealing a card and changing its properties when clicked
 function revealCard(event) {
-  // Add this click to the total score
-  gameState.score += 1;
-
   let clickedCardClass;
   /**
    * There are 2 areas a user can click
@@ -98,12 +95,16 @@ function revealCard(event) {
 
   // TODO: Check a method to simplify above lines of code (nearest or closest name of the method)
 
+  // Find which card in the gameState is the exact same card that the user clicked on the board
   const gameStateCard = gameState.board.find(
     (element) => element.icon === clickedCardClass
   );
 
   // Check if the card clicked is a match
-  if (clickedCardClass === gameState.cardToFind) {
+  if (gameStateCard.icon === gameState.cardToFind) {
+    // Add this click to the total score
+    gameState.score += 1;
+
     // The card clicked is a match, set matched to true
     gameStateCard.matched = true;
 
@@ -111,7 +112,12 @@ function revealCard(event) {
     newCardToFind();
 
     renderBoard();
-  } else {
+  } else if (!gameStateCard.matched) {
+    // If the card isn't a match with the current "card to find", AND it already hasn't been previously matched
+
+    // Add this click to the total score
+    gameState.score += 1;
+
     // The card clicked is not a match
     // Reveal the card to the user
     gameStateCard.show = true;
@@ -125,7 +131,7 @@ function revealCard(event) {
     setTimeout(() => {
       renderBoard();
       document.getElementById("cards").addEventListener("click", revealCard);
-    }, 1000); // TODO: Change this to 1000ms
+    }, 200); // TODO: Change this to 1000ms
   }
 }
 

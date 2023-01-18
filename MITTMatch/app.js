@@ -1,10 +1,3 @@
-// TODO:
-/**
- * 2. Code Clean-Up
- * 3. Ask Alex or Chris for their advice/opinion. Get them to test out the program and find any flaws!
- * 4. Write "Copyright" info at top (name, course, date, etc.)
- */
-
 /**
  * Name: Hamza Haque
  * Course: JavaScript Basics-SD-110-F22S1

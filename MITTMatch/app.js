@@ -1,20 +1,25 @@
-// Shuffle function from http://stackoverflow.com/a/2450976
+// Modifying Shuffle function from http://stackoverflow.com/a/2450976
 let shuffle = function (array) {
-  let currentIndex = array.length,
+  // Creating a new array so that the array referenced passed in does not get affected
+  let newShuffledArray = [];
+  for (let element of array) {
+    newShuffledArray.push(element);
+  }
+
+  let currentIndex = newShuffledArray.length,
     temporaryValue,
     randomIndex;
 
   while (currentIndex !== 0) {
     randomIndex = Math.floor(Math.random() * currentIndex);
     currentIndex -= 1;
-    temporaryValue = array[currentIndex];
-    array[currentIndex] = array[randomIndex];
-    array[randomIndex] = temporaryValue;
+    temporaryValue = newShuffledArray[currentIndex];
+    newShuffledArray[currentIndex] = newShuffledArray[randomIndex];
+    newShuffledArray[randomIndex] = temporaryValue;
   }
-  return array;
-};
 
-// TODO: Make the function create a new array, append values, and then return the new array
+  return newShuffledArray;
+};
 
 // This function is responsible for resetting the gameState
 function generateGameState() {
@@ -33,13 +38,6 @@ function generateGameState() {
 
 // This function is responsible for rendering the game board to match the information in the gameState
 function renderBoard() {
-  // // Updating the "Next Card"
-  // const currentNextCard =
-  //   document.getElementById("next-card").firstElementChild.classList[1];
-  // document
-  //   .getElementById("next-card")
-  //   .firstElementChild.classList.replace(currentNextCard, gameState.cardToFind);
-
   const elementCards = [...document.getElementsByClassName("card")];
   for (let i = 0; i < elementCards.length; i++) {
     // Replacing the icon class name to match the icon class name in gameState
@@ -51,7 +49,6 @@ function renderBoard() {
     // Adding or removing the match class
     if (gameState.board[i].matched) {
       elementCards[i].classList.add("matched");
-      console.log(gameState);
     } else {
       elementCards[i].classList.remove("matched");
     }
@@ -86,6 +83,7 @@ function revealCard(event) {
     (element) => element.icon === clickedCardClass
   );
 
+  // Check if the card clicked is a match
   if (clickedCardClass === gameState.cardToFind) {
     // The card clicked is a match, set matched to true
     gameStateCard.matched = true;
@@ -104,13 +102,15 @@ function revealCard(event) {
     setTimeout(() => {
       renderBoard();
       document.getElementById("cards").addEventListener("click", revealCard);
-    }, 1000);
+    }, 100); // TODO: Change this to 1000ms
   }
 }
 
+function newCardToFind() {}
+
 // TODO:
 /**
- * 5. If it is a match, then change the cardToFind variable to a new one
+ * 5. If it is a match, then change the cardToFind variable to a new one.
  * 6. Fix a bug: Whenever there is a match, why is the board resetting?? - Seems to be only happening after a match - Calling Lines 51 - 54 twice???
  */
 

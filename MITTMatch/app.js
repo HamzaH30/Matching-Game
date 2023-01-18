@@ -11,7 +11,6 @@ let shuffle = function (array) {
     array[currentIndex] = array[randomIndex];
     array[randomIndex] = temporaryValue;
   }
-
   return array;
 };
 
@@ -91,35 +90,22 @@ function revealCard(event) {
     // The card clicked is a match, set matched to true
     gameStateCard.matched = true;
     renderBoard();
-
-    // Change the "next card"/card to find
-    newCardToFind();
   } else {
     // The card clicked is not a match
-    // Show the card
+    // Reveal the card to the user
     gameStateCard.show = true;
-
     renderBoard();
+
+    // Removing the event listener to prevent the user from clicking again and revealing more than 1 card
+    document.getElementById("cards").removeEventListener("click", revealCard);
 
     // Hide the card again after a set duration
     gameStateCard.show = false;
-    setTimeout(() => renderBoard(), 1200);
+    setTimeout(() => {
+      renderBoard();
+      document.getElementById("cards").addEventListener("click", revealCard);
+    }, 1000);
   }
-}
-
-function newCardToFind() {
-  /**
-   * Create a random array of the cards
-   * Loop through all the cards in that array
-   * If the card is not currently matched, then make that the cardToFind
-   */
-  for (let card of shuffle(gameState.board)) {
-    if (!card.matched) {
-      gameState.cardToFind = card.icon;
-    }
-  }
-
-  // renderBoard();
 }
 
 // TODO:

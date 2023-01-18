@@ -33,6 +33,9 @@ function generateGameState() {
     gameState.board[i].show = false;
   }
 
+  // Change the card to find to a new card
+  newCardToFind();
+
   renderBoard();
 }
 
@@ -60,8 +63,15 @@ function renderBoard() {
       elementCards[i].classList.remove("show");
     }
   }
+
+  // Update the "Next Card"/"Card to find"
+  const nextCardElement =
+    document.getElementById("next-card").firstElementChild;
+  const oldCardToFind = nextCardElement.classList[1];
+  nextCardElement.classList.replace(oldCardToFind, gameState.cardToFind);
 }
 
+// This function is responsible for revealing a card and changing its properties when clicked
 function revealCard(event) {
   let clickedCardClass;
   /**
@@ -87,6 +97,10 @@ function revealCard(event) {
   if (clickedCardClass === gameState.cardToFind) {
     // The card clicked is a match, set matched to true
     gameStateCard.matched = true;
+
+    newCardToFind();
+    console.log(gameState);
+
     renderBoard();
   } else {
     // The card clicked is not a match
@@ -106,13 +120,16 @@ function revealCard(event) {
   }
 }
 
-function newCardToFind() {}
-
-// TODO:
-/**
- * 5. If it is a match, then change the cardToFind variable to a new one.
- * 6. Fix a bug: Whenever there is a match, why is the board resetting?? - Seems to be only happening after a match - Calling Lines 51 - 54 twice???
- */
+function newCardToFind() {
+  // Generate through a random array of cards
+  let deckOfCards = shuffle(gameState.board);
+  for (let card of deckOfCards) {
+    if (!card.matched) {
+      gameState.cardToFind = card.icon;
+      return;
+    }
+  }
+}
 
 const gameState = {
   cardToFind: "fa-anchor",

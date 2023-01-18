@@ -5,6 +5,13 @@
  * 4. Write "Copyright" info at top (name, course, date, etc.)
  */
 
+/**
+ * Name: Hamza Haque
+ * Course: JavaScript Basics-SD-110-F22S1
+ * Date: January 18, 2023
+ * Final Project - MITT Match
+ */
+
 // This is a modified Shuffle function. Originally from http://stackoverflow.com/a/2450976
 let shuffle = function (array) {
   // Creating a new array so that the array referenced passed in does not get affected
@@ -53,8 +60,9 @@ function generateGameState() {
   // New array of the cards that the user has to find
   gameState.cardsToFind = shuffle(gameState.board).map((card) => card.icon);
 
-  // Reset the score
+  // Reset the score and pause state
   gameState.score = 0;
+  gameState.pause = false;
 
   // Change the card that the user has to find, then render the board.
   newCardToFind();
@@ -99,13 +107,14 @@ function renderBoard() {
 }
 
 /**
- * This function is responsible for calling the revealCard() function only when
+ * When the user clicks, this function is responsible for calling the revealCard() function only when
  *  1. The user clicks a valid card and not (for example) in between the cards
  *  2. The user hasn't already won.
  *  3. The card that the user clicked isn't already a matched card.
+ *  4. The game isn't currently paused
  */
 function checkIfValidClick(event) {
-  if (event.target.id !== "cards" && !checkIfWin()) {
+  if (event.target.id !== "cards" && !checkIfWin() && !gameState.pause) {
     /**
      * Finding the icon class of the card that the user clicked.
      * There are 2 areas a user can click
@@ -140,29 +149,21 @@ function revealCard(cardClicked) {
     // Generate a new card for the user to find
     newCardToFind();
     renderBoard();
-
-    console.log(gameState.cardsToFind);
   } else {
-    // If the card isn't a match with the current "card to find"
+    // The card isn't a match with the current "card to find"
     cardClicked.show = true;
     renderBoard();
 
-    // TODO: Eliminate the need of using eventListeners and use the checkIfValidClick function -> also add a "pause" key to the gameState
-
-    // Removing the event listener to prevent the user from clicking again and revealing more than 1 card
-    document
-      .getElementById("cards")
-      .removeEventListener("click", checkIfValidClick);
+    // A card is being shown, therefore pause the game
+    gameState.pause = true;
 
     // Hide the card again
     cardClicked.show = false;
 
-    // Only render the board (to visually hide the card) and allow the user to continue clicking after a set duration
+    // Only render the board (to visually hide the card) and unpause the game after a set duration.
     setTimeout(() => {
       renderBoard();
-      document
-        .getElementById("cards")
-        .addEventListener("click", checkIfValidClick);
+      gameState.pause = false;
     }, 750);
   }
 
@@ -205,11 +206,12 @@ function alertUserWin() {
 const gameState = {
   cardToFind: "fa-anchor",
   cardsToFind: [],
-  score: 0,
   board: [],
+  score: 0,
+  pause: false,
 };
 
-// Populating the board with cards
+// Populating the gameState with the default information
 generateGameState();
 
 // Event Listeners for when the user clicks the restart button or a card

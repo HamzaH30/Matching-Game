@@ -33,8 +33,9 @@ function generateGameState() {
   // Shuffles all the list elements of the cards.
   const elementCards = shuffle([...document.getElementsByClassName("card")]);
 
-  // Emptying the current board.
+  // Emptying the current board and cards that the user has to find.
   gameState.board = [];
+  gameState.cardsToFind = [];
 
   // Populating the cards in the gameState board and setting them to their "default" values
   for (let card of elementCards) {
@@ -50,7 +51,7 @@ function generateGameState() {
   }
 
   // New array of the cards that the user has to find
-  // gameState.cardsToFind = shuffle(gameState.board).forEach((card) => );
+  gameState.cardsToFind = shuffle(gameState.board).map((card) => card.icon);
 
   // Reset the score
   gameState.score = 0;
@@ -139,6 +140,8 @@ function revealCard(cardClicked) {
     // Generate a new card for the user to find
     newCardToFind();
     renderBoard();
+
+    console.log(gameState.cardsToFind);
   } else {
     // If the card isn't a match with the current "card to find"
     cardClicked.show = true;
@@ -170,19 +173,9 @@ function revealCard(cardClicked) {
   }
 }
 
-// TODO: Make it so that you shuffle once, and only once for a deck of cards to find
-
 // This function is responsible for generating a new card for the user to find.
 function newCardToFind() {
-  // Loop through a random array of cards
-  let deckOfCards = shuffle(gameState.board);
-  for (let card of deckOfCards) {
-    // If the card is not a match, then that is the card the user will have to now find.
-    if (!card.matched) {
-      gameState.cardToFind = card.icon;
-      return;
-    }
-  }
+  gameState.cardToFind = gameState.cardsToFind.shift();
 }
 
 // This function returns true or false depending on if the user has matched all the cards
